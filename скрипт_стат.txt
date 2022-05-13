@@ -1,0 +1,191 @@
+CREATE TABLE lessons
+(
+	lesson_id            INTEGER GENERATED AS IDENTITY NOT NULL ,
+	lesson_name          VARCHAR(200) NULL,
+    lesson_date          DATE
+);
+
+ALTER TABLE lessons
+	ADD CONSTRAINT  XPKlessons PRIMARY KEY (lesson_id);
+
+
+INSERT INTO lessons (lesson_name, lesson_date) VALUES
+ ('ПЗ-1', TO_DATE('2021/12/22' , 'yyyy/mm/dd'));
+INSERT INTO lessons (lesson_name, lesson_date) VALUES
+ ('Урок 3', TO_DATE('2021/12/27' , 'yyyy/mm/dd'));
+INSERT INTO lessons (lesson_name, lesson_date) VALUES
+ ('ПЗ-2', TO_DATE('2021/12/29' , 'yyyy/mm/dd'));
+INSERT INTO lessons (lesson_name, lesson_date) VALUES
+ ('Урок 4', TO_DATE('2022/12/30' , 'yyyy/mm/dd'));
+INSERT INTO lessons (lesson_name, lesson_date) VALUES
+ ('ПЗ-3', TO_DATE('2022/01/10' , 'yyyy/mm/dd'));
+
+
+
+
+CREATE TABLE students
+(
+	student_id           INTEGER GENERATED AS IDENTITY NOT NULL ,
+	last_name            VARCHAR(100) NULL ,
+	first_name           VARCHAR(100) NULL 
+);
+
+CREATE UNIQUE INDEX XPKstudents ON students
+(student_id   ASC);
+
+
+
+ALTER TABLE students
+	ADD CONSTRAINT  XPKstudents PRIMARY KEY (student_id);
+
+
+INSERT INTO students (last_name, first_name) VALUES
+ ('Яковлев','Семён');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Морозова','Анастасия');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Лиханская','Екатерина');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Самойлов','Сергей');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Бирюков','Юрий');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Киселёв','Алексей');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Лазарева','Яна');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Иванова','Мария');
+ INSERT INTO students (last_name, first_name) VALUES
+ ('Голомысов','Даниил'); 
+  INSERT INTO students (last_name, first_name) VALUES
+ ('Володин','Никита'); 
+   INSERT INTO students (last_name, first_name) VALUES
+ ('Попков','Павел'); 
+
+
+CREATE TABLE students_lessons
+(
+	student_id           INTEGER NOT NULL ,
+	lesson_id            INTEGER NOT NULL ,
+	stud_mark            VARCHAR(20) NULL ,
+	question             VARCHAR(50) NULL,
+        active_work          VARCHAR(50) NULL
+);
+
+CREATE UNIQUE INDEX XPKstudents_lessons ON students_lessons
+(student_id   ASC,lesson_id   ASC);
+
+ALTER TABLE students_lessons
+	ADD CONSTRAINT  XPKstudents_lessons PRIMARY KEY (student_id,lesson_id);
+
+INSERT INTO students_lessons (student_id, lesson_id, stud_mark, question, active_work) VALUES
+ (1,1,'+','модели данных','(+)');
+INSERT INTO students_lessons (student_id, lesson_id, stud_mark, question) VALUES
+ (2,1,'+','связи');
+ INSERT INTO students_lessons (student_id, lesson_id, stud_mark, question) VALUES
+ (3,1,'+','индексы');
+ INSERT INTO students_lessons (student_id, lesson_id, stud_mark, question) VALUES
+ (4,1,'+','инвертированные списки');
+ INSERT INTO students_lessons (student_id, lesson_id, stud_mark, question, active_work) VALUES
+ (5,1,'+','нормальные формы','(+)');
+ INSERT INTO students_lessons (student_id, lesson_id, stud_mark) VALUES
+ (6,1,'+');
+ INSERT INTO students_lessons (student_id, lesson_id, stud_mark) VALUES
+ (7,1,'+');
+ INSERT INTO students_lessons (student_id, lesson_id, stud_mark, question) VALUES
+ (8,1,'+','between in');
+ INSERT INTO students_lessons (student_id, lesson_id, question) VALUES
+ (9,1,' identity и агрегатные функции'); 
+ INSERT INTO students_lessons (student_id, lesson_id, active_work) VALUES
+ (11,1,'(+)');
+ 
+
+CREATE TABLE extra_tasks
+(
+	task_id            INTEGER GENERATED AS IDENTITY NOT NULL ,
+	task_name          VARCHAR(200) NULL
+);
+
+ALTER TABLE extra_tasks
+	ADD CONSTRAINT  XPKextra_tasks PRIMARY KEY (task_id);
+
+INSERT INTO extra_tasks (task_name) VALUES
+ ('Доп задание на праздники');
+ INSERT INTO extra_tasks (task_name) VALUES
+ ('Доп. Зад. 1');
+
+
+CREATE TABLE extra_task_students
+(
+	task_id            INTEGER NOT NULL ,
+	student_id         INTEGER NOT NULL ,
+        mark_1             VARCHAR(20) NULL ,
+        mark_2             VARCHAR(20) NULL 
+);
+
+ALTER TABLE extra_task_students
+	ADD (CONSTRAINT R_6 FOREIGN KEY (task_id) REFERENCES extra_tasks (task_id));
+    
+ALTER TABLE extra_task_students
+	ADD (CONSTRAINT R_7 FOREIGN KEY (student_id) REFERENCES students (student_id));
+
+INSERT INTO extra_task_students (task_id, student_id, mark_1, mark_2) VALUES
+ (1,1,'+','(+)');
+INSERT INTO extra_task_students (task_id, student_id, mark_1, mark_2) VALUES
+ (1,5,'+','(+)');
+ INSERT INTO extra_task_students (task_id, student_id, mark_1, mark_2) VALUES
+ (1,7,'+','(+)');
+ INSERT INTO extra_task_students (task_id, student_id, mark_1, mark_2) VALUES
+ (1,12,'+','(+)');
+ INSERT INTO extra_task_students (task_id, student_id, mark_1, mark_2) VALUES
+ (2,1,'+','(+)');
+ 
+
+CREATE TABLE topics
+(
+	topic_id             INTEGER GENERATED AS IDENTITY NOT NULL ,
+	topic_name           VARCHAR(200) CONSTRAINT topic_name_nn NOT NULL ,
+	lesson_id            INTEGER NULL 
+);
+
+CREATE UNIQUE INDEX XPKtopics ON topics
+(topic_id   ASC);
+
+ALTER TABLE topics
+	ADD CONSTRAINT  XPKtopics PRIMARY KEY (topic_id);
+
+
+INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('developer',1);
+INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('toad',1);
+ INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('navigator',1);
+ INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Операции реляционной алгебры',2);
+  INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Основные операции реляционной алгебры',2);
+  INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Вспомогательные операции реляционной алгебры',2);
+  INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Общие сведения о языке PL/SQL',2);
+  INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Создание таблиц',2);
+   INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Команды модификации данных',2);
+  INSERT INTO topics (topic_name, lesson_id) VALUES
+ ('Извлечение данных из таблиц',2);
+
+
+ALTER TABLE students_lessons
+	ADD (CONSTRAINT R_1 FOREIGN KEY (student_id) REFERENCES students (student_id));
+
+
+
+ALTER TABLE students_lessons
+	ADD (CONSTRAINT R_3 FOREIGN KEY (lesson_id) REFERENCES lessons (lesson_id));
+
+
+
+ALTER TABLE topics
+	ADD (CONSTRAINT R_5 FOREIGN KEY (lesson_id) REFERENCES lessons (lesson_id) ON DELETE SET NULL);
